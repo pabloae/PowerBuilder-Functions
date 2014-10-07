@@ -1,0 +1,58 @@
+$PBExportHeader$gf_print_ie_ole_object.srf
+$PBExportComments$Función global para la impresión del contenido de un objeto ole "Microsoft Web Browser" Control o para la configuración de su impresión
+global type gf_print_ie_ole_object from function_object
+end type
+ 
+forward prototypes
+global subroutine gf_print_ie_ole_object (ref olecustomcontrol p_ole_object, boolean p_only_page_setup)
+end prototypes
+ 
+global subroutine gf_print_ie_ole_object (ref olecustomcontrol p_ole_object, boolean p_only_page_setup);///////////////////////////////////////////////////////////////////////
+//
+//  Function Name: gf_print_ie_ole_object
+//  
+//  Scope: <ACCESS> Public</ACCESS>
+//
+/*  Objective:  <DESC> Print or print page setup of a Microsoft Web Browser Control in PowerBuilder</DESC>
+*/
+///////////////////////////////////////////////////////////////////////
+/*
+  Parameters: <ARGS>
+		p_ole_object:	olecustomcontrol ( Microsoft Web Browser Control)
+		p_only_page_setup:	True=Page setup of the ole object; False=Print of the ole object
+	      </ARGS>
+ 
+  Return: <RETURN>
+		<LI>  (None)
+ 	  </RETURN>		
+*/
+///////////////////////////////////////////////////////////////////////
+//
+//  Historical:
+//  
+//  *Author*				*Date*		*Changes*
+//  ~~~~~~~				~~~~~~	~~~~~~~~~
+//  Pablo Alonso			20/08/2014	Initial version				
+//
+///////////////////////////////////////////////////////////////////////
+ 
+//Constanstes
+int OLECMDID_PRINT           = 6
+int OLECMDID_PRINTPREVIEW    = 7
+int OLECMDID_PAGESETUP       = 8
+ 
+int OLECMDEXECOPT_DODEFAULT      = 0
+int OLECMDEXECOPT_PROMPTUSER     = 1
+int OLECMDEXECOPT_DONTPROMPTUSER = 2
+ 
+//Se pasa por referencia un objeto ole, Microsoft Web Browser Control,  llamado p_ole_object:
+IF NOT p_only_page_setup THEN
+	//Para imprimir el contenido de ese objeto (página web, pdf etc.). Comentamos esta forma:
+	//p_ole_object.object.ExecWB( OLECMDID_PRINT, OLECMDEXECOPT_PROMPTUSER )
+	//Otra forma equivalente de impresión, usando AsStatement! para evitar posibles conflictos de nombres: 
+	p_ole_object.object.ExecWB( OLECMDID_PRINT, OLECMDEXECOPT_PROMPTUSER , AsStatement! )
+ELSE
+	//Para configuración de impresión:  
+	p_ole_object.object.ExecWB( OLECMDID_PAGESETUP, OLECMDEXECOPT_DONTPROMPTUSER, AsStatement! )
+END IF
+end subroutine
